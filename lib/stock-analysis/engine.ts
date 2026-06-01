@@ -465,11 +465,12 @@ function scoreEntry(args: {
 
   let momentum = 0;
   if (args.trendMode === "20D") {
-    if (args.adx >= 20) momentum += 10;
-    else if (args.adx >= 15) momentum += 6;
+    if (args.adx >= 20) momentum += 8;
+    else if (args.adx >= 15) momentum += 5;
     else if (args.adx >= 12) momentum += 3;
-    if (args.ma5Slope > 0) momentum += 6;
-    if (args.changePct5d >= 2) momentum += 4;
+    if (args.ma5Slope > 0) momentum += 5;
+    if (args.changePct5d > 12) momentum += 1;
+    else if (args.changePct5d >= 2) momentum += 4;
     else if (args.changePct5d > 0) momentum += 2;
   } else {
     if (args.adx >= 25) momentum += 12;
@@ -486,7 +487,9 @@ function scoreEntry(args: {
   if (args.trendMode === "20D") {
     if (args.close >= args.ma20 && distanceAbs <= 2.5) pullback = 15;
     else if (args.close >= args.ma20 && distanceAbs <= 5) pullback = 10;
-    else if (args.close > args.ma20) pullback = 6;
+    else if (args.close >= args.ma20 && distanceAbs <= 10) pullback = 6;
+    else if (args.close >= args.ma20 && distanceAbs <= 15) pullback = 3;
+    else if (args.close > args.ma20) pullback = 0;
     else if (args.close > 0) pullback = 2;
   } else {
     if (args.close >= args.ma20 && distanceAbs <= 3) pullback = 15;

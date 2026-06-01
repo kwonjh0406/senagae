@@ -196,9 +196,6 @@ export function StockAnalysisClient({
         <div>
           <p className="eyebrow">종목 분석</p>
           <h1>차트 흐름으로 진입 점수를 계산해요</h1>
-          <p className="hero-description">
-            이동평균, ADX, ATR, 시장 국면을 함께 읽어 원본 분석 엔진의 진입 점수를 세나개 디자인에 맞게 보여줍니다.
-          </p>
         </div>
         <div className="analysis-input-card">
           <label htmlFor="analysis-symbol">종목명 또는 티커</label>
