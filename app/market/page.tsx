@@ -27,26 +27,8 @@ export default async function MarketPage() {
   const overview = await getMarketOverview();
 
   return (
-    <main className="guide-page">
+    <main className="guide-page market-page">
       <AppHeader active="market" />
-      <section className="guide-hero">
-        <div>
-          <p className="eyebrow">증시 현황</p>
-          <h1>시장 흐름을 빠르게 훑는 현황판</h1>
-          <p className="hero-description">
-            국내외 지수, 환율, 투자 심리를 한 화면에서 확인하고 종목 분석으로
-            자연스럽게 이어지도록 정리했습니다.
-          </p>
-        </div>
-        <aside className="guide-note" aria-label="증시 현황 안내">
-          <strong>업데이트 기준</strong>
-          <ul>
-            <li>주요 지수와 환율은 서버에서 주기적으로 새로 가져옵니다.</li>
-            <li>공포탐욕 지수는 KOSPI 기준 투자 심리 데이터를 우선 표시합니다.</li>
-          </ul>
-        </aside>
-      </section>
-
       <section className="market-board" aria-label="실시간 증시 현황">
         <div className="market-card-grid">
           {overview.items.map((card) => (
@@ -59,17 +41,12 @@ export default async function MarketPage() {
           ))}
         </div>
         <aside className={`fear-greed-card ${overview.fearGreed.tone}`} aria-label="공포 탐욕 지수">
-          <span>공포·탐욕 지수</span>
+          <span>KOSPI 공포·탐욕</span>
           <strong>{overview.fearGreed.score ?? "--"}</strong>
           <h2>{overview.fearGreed.label}</h2>
           <div className="fear-greed-meter" aria-hidden="true">
             <i style={{ width: `${overview.fearGreed.score ?? 50}%` }} />
           </div>
-          <p>
-            {overview.fearGreed.score === null
-              ? "외부 데이터 연결이 지연 중입니다."
-              : "KOSPI 기준 시장 심리가 공포 쪽인지 탐욕 쪽인지 빠르게 보는 보조 지표입니다."}
-          </p>
           <small>기준 {formatAsOf(overview.fearGreed.updatedAt ?? overview.asOf)}</small>
         </aside>
       </section>

@@ -798,6 +798,10 @@ h1 {
   margin-bottom: clamp(44px, 7vw, 78px);
 }
 
+.market-page .app-header {
+  margin-bottom: 28px;
+}
+
 .guide-hero {
   align-items: stretch;
   display: grid;
@@ -890,6 +894,10 @@ h1 {
   grid-template-columns: minmax(0, 1.3fr) minmax(280px, 0.7fr);
   margin: 46px auto 0;
   max-width: 1180px;
+}
+
+.market-page .market-board {
+  margin-top: 0;
 }
 
 .market-card-grid {
