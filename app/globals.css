@@ -802,6 +802,10 @@ h1 {
   margin-bottom: 28px;
 }
 
+.community-page .app-header {
+  margin-bottom: 28px;
+}
+
 .guide-hero {
   align-items: stretch;
   display: grid;

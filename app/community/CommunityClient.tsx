@@ -199,7 +199,6 @@ export function CommunityClient({ initialNickname }: { initialNickname: string }
         <form className="community-composer" onSubmit={createPost}>
           <div className="board-title">
             <span>글쓰기</span>
-            <strong>로그인 없음</strong>
           </div>
           <label>
             닉네임
