@@ -9,7 +9,7 @@ export default function ChartsPage() {
 
   return (
     <main className="guide-page">
-      <GuideHeader />
+      <GuideHeader current="/guide/charts" />
       <article className="guide-article">
         <div className="article-hero guide-blue">
           <div>

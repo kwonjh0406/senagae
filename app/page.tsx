@@ -1,13 +1,5 @@
 import Link from "next/link";
-
-const menuItems = [
-  { href: "#", label: "투자정보" },
-  { href: "#", label: "뉴스" },
-  { href: "#", label: "종목방" },
-  { href: "#", label: "수수료" },
-  { href: "#", label: "환율" },
-  { href: "/community", label: "커뮤니티" },
-];
+import { AppHeader } from "./components/AppHeader";
 
 const featureTiles = [
   { title: "오늘의 장터", text: "시장 흐름과 주요 이슈가 모이는 곳", color: "tile-mint" },
@@ -27,24 +19,7 @@ export default function Home() {
   return (
     <main className="min-h-screen overflow-hidden bg-[#fff7d7] text-[#3d2b1f]">
       <section className="hero-shell">
-        <header className="site-header" aria-label="서비스 소개">
-          <Link className="brand-mark" href="/" aria-label="세상에 나쁜 개미는 없다 홈">
-            <span className="brand-ant" aria-hidden="true">
-              <span />
-            </span>
-            <span>세나개</span>
-          </Link>
-          <nav className="nav-tabs" aria-label="준비 중인 메뉴">
-            <Link className="active-tab" href="/guide">
-              가이드
-            </Link>
-            {menuItems.map((item) => (
-              <Link href={item.href} key={item.label}>
-                {item.label}
-              </Link>
-            ))}
-          </nav>
-        </header>
+        <AppHeader active="home" />
 
         <div className="hero-grid">
           <div className="hero-copy">

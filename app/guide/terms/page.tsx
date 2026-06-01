@@ -7,7 +7,7 @@ export default function TermsPage() {
 
   return (
     <main className="guide-page">
-      <GuideHeader />
+      <GuideHeader current="/guide/terms" />
       <article className="guide-article">
         <div className="article-hero guide-green">
           <p>{article.eyebrow}</p>

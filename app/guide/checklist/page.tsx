@@ -7,7 +7,7 @@ export default function ChecklistPage() {
 
   return (
     <main className="guide-page">
-      <GuideHeader />
+      <GuideHeader current="/guide/checklist" />
       <article className="guide-article">
         <div className="article-hero guide-pink">
           <p>{article.eyebrow}</p>
