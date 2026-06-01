@@ -1088,7 +1088,9 @@ h1 {
 
 .community-toolbar button,
 .community-composer button,
+.post-action-row button,
 .comment-form button,
+.comment-item button,
 .delete-row button {
   background: var(--yellow);
   border: 3px solid var(--ink);
@@ -1154,15 +1156,40 @@ h1 {
   font-weight: 800;
 }
 
-.community-post h2 {
+.community-post header em {
+  background: #ffffff;
+  border: 2px solid rgba(61, 43, 31, 0.5);
+  border-radius: 999px;
+  font-size: 13px;
+  font-style: normal;
+  font-weight: 900;
+  padding: 5px 10px;
+}
+
+.post-title-button {
+  background: transparent;
+  border: 0;
+  color: var(--ink);
+  cursor: pointer;
+  display: block;
+  font: inherit;
   font-size: clamp(27px, 4vw, 40px);
   font-weight: 1000;
   line-height: 1.15;
   margin: 16px 0 12px;
+  padding: 0;
+  text-align: left;
+  width: 100%;
   word-break: keep-all;
 }
 
-.community-post > p {
+.post-title-button:hover {
+  text-decoration: underline;
+  text-decoration-thickness: 3px;
+  text-underline-offset: 5px;
+}
+
+.post-expanded-panel > p {
   background: #ffffff;
   border: 2px dashed rgba(61, 43, 31, 0.45);
   border-radius: 8px;
@@ -1173,6 +1200,17 @@ h1 {
   padding: 16px;
   white-space: pre-wrap;
   word-break: keep-all;
+}
+
+.post-action-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin: 14px 0 0;
+}
+
+.post-action-row button:last-child {
+  background: #ffffff;
 }
 
 .delete-row {
@@ -1219,6 +1257,14 @@ h1 {
   line-height: 1.55;
   margin: 10px 0 0;
   white-space: pre-wrap;
+}
+
+.comment-item button {
+  background: #ffffff;
+  box-shadow: 0 3px 0 var(--ink);
+  font-size: 13px;
+  margin-left: auto;
+  padding: 7px 10px;
 }
 
 .comment-form {

@@ -35,6 +35,10 @@ export function CommunityClient({ initialNickname }: { initialNickname: string }
   const [posts, setPosts] = useState<Post[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [isComposerOpen, setIsComposerOpen] = useState(false);
+  const [expandedPostId, setExpandedPostId] = useState<string | null>(null);
+  const [openCommentFormId, setOpenCommentFormId] = useState<string | null>(null);
+  const [openPostMenuId, setOpenPostMenuId] = useState<string | null>(null);
+  const [openCommentMenuId, setOpenCommentMenuId] = useState<string | null>(null);
   const [message, setMessage] = useState("");
   const [postForm, setPostForm] = useState({
     content: "",
@@ -113,6 +117,7 @@ export function CommunityClient({ initialNickname }: { initialNickname: string }
 
     setPostForm({ content: "", nickname: makeNickname(), password: "", title: "" });
     setIsComposerOpen(false);
+    setExpandedPostId(null);
     setMessage("글이 등록되었습니다.");
     await loadPosts();
   }
@@ -137,6 +142,7 @@ export function CommunityClient({ initialNickname }: { initialNickname: string }
       ...current,
       [postId]: { content: "", nickname: makeNickname(), password: "" },
     }));
+    setOpenCommentFormId(null);
     setMessage("댓글이 등록되었습니다.");
     await loadPosts();
   }
@@ -154,6 +160,7 @@ export function CommunityClient({ initialNickname }: { initialNickname: string }
       return;
     }
 
+    setOpenPostMenuId(null);
     setMessage("글이 삭제되었습니다.");
     await loadPosts();
   }
@@ -171,6 +178,7 @@ export function CommunityClient({ initialNickname }: { initialNickname: string }
       return;
     }
 
+    setOpenCommentMenuId(null);
     setMessage("댓글이 삭제되었습니다.");
     await loadPosts();
   }
@@ -234,84 +242,148 @@ export function CommunityClient({ initialNickname }: { initialNickname: string }
         {posts.length === 0 ? <p className="empty-board">{emptyText}</p> : null}
         {posts.map((post) => {
           const commentForm = getCommentForm(post.id);
+          const isExpanded = expandedPostId === post.id;
+          const isPostMenuOpen = openPostMenuId === post.id;
+          const isCommentFormOpen = openCommentFormId === post.id;
           return (
             <article className="community-post" key={post.id}>
               <header>
                 <div>
                   <span>{post.nickname}</span>
                   <time dateTime={post.createdAt}>{formatDate(post.createdAt)}</time>
+                  <em>댓글 {post.comments.length}</em>
                 </div>
-                <h2>{post.title}</h2>
-              </header>
-              <p>{post.content}</p>
-              <div className="delete-row">
-                <input
-                  placeholder="글 비밀번호"
-                  type="password"
-                  value={deletePasswords[`post-${post.id}`] ?? ""}
-                  onChange={(event) =>
-                    setDeletePasswords((current) => ({
-                      ...current,
-                      [`post-${post.id}`]: event.target.value,
-                    }))
-                  }
-                />
-                <button type="button" onClick={() => void deletePost(post.id)}>
-                  글 삭제
+                <button
+                  aria-expanded={isExpanded}
+                  className="post-title-button"
+                  type="button"
+                  onClick={() => {
+                    setExpandedPostId((current) => (current === post.id ? null : post.id));
+                    setOpenPostMenuId(null);
+                    setOpenCommentFormId(null);
+                    setOpenCommentMenuId(null);
+                  }}
+                >
+                  {post.title}
                 </button>
-              </div>
+              </header>
 
-              <section className="comment-box" aria-label={`${post.title} 댓글`}>
-                <h3>댓글 {post.comments.length}</h3>
-                {post.comments.map((comment) => (
-                  <div className="comment-item" key={comment.id}>
-                    <div>
-                      <strong>{comment.nickname}</strong>
-                      <time dateTime={comment.createdAt}>{formatDate(comment.createdAt)}</time>
-                    </div>
-                    <p>{comment.content}</p>
-                    <div className="delete-row compact">
+              {isExpanded ? (
+                <div className="post-expanded-panel">
+                  <p>{post.content}</p>
+                  <div className="post-action-row">
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setOpenCommentFormId((current) => (current === post.id ? null : post.id));
+                        setOpenPostMenuId(null);
+                      }}
+                    >
+                      {isCommentFormOpen ? "댓글 닫기" : "댓글 작성"}
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setOpenPostMenuId((current) => (current === post.id ? null : post.id));
+                        setOpenCommentFormId(null);
+                      }}
+                    >
+                      더보기
+                    </button>
+                  </div>
+
+                  {isPostMenuOpen ? (
+                    <div className="delete-row">
                       <input
-                        placeholder="댓글 비밀번호"
+                        placeholder="글 비밀번호"
                         type="password"
-                        value={deletePasswords[`comment-${comment.id}`] ?? ""}
+                        value={deletePasswords[`post-${post.id}`] ?? ""}
                         onChange={(event) =>
                           setDeletePasswords((current) => ({
                             ...current,
-                            [`comment-${comment.id}`]: event.target.value,
+                            [`post-${post.id}`]: event.target.value,
                           }))
                         }
                       />
-                      <button type="button" onClick={() => void deleteComment(comment.id)}>
-                        삭제
+                      <button type="button" onClick={() => void deletePost(post.id)}>
+                        글 삭제
                       </button>
                     </div>
-                  </div>
-                ))}
+                  ) : null}
 
-                <form className="comment-form" onSubmit={(event) => void createComment(post.id, event)}>
-                  <input
-                    aria-label="댓글 닉네임"
-                    value={commentForm.nickname}
-                    onChange={(event) => updateCommentForm(post.id, { nickname: event.target.value })}
-                  />
-                  <input
-                    aria-label="댓글 임시 비밀번호"
-                    placeholder="비밀번호"
-                    type="password"
-                    value={commentForm.password}
-                    onChange={(event) => updateCommentForm(post.id, { password: event.target.value })}
-                  />
-                  <textarea
-                    aria-label="댓글 내용"
-                    placeholder="댓글을 남겨주세요"
-                    rows={3}
-                    value={commentForm.content}
-                    onChange={(event) => updateCommentForm(post.id, { content: event.target.value })}
-                  />
-                  <button type="submit">댓글 등록</button>
-                </form>
-              </section>
+                  <section className="comment-box" aria-label={`${post.title} 댓글`}>
+                    <h3>댓글 {post.comments.length}</h3>
+                    {post.comments.map((comment) => {
+                      const isCommentMenuOpen = openCommentMenuId === comment.id;
+                      return (
+                        <div className="comment-item" key={comment.id}>
+                          <div>
+                            <strong>{comment.nickname}</strong>
+                            <time dateTime={comment.createdAt}>{formatDate(comment.createdAt)}</time>
+                            <button
+                              type="button"
+                              onClick={() =>
+                                setOpenCommentMenuId((current) =>
+                                  current === comment.id ? null : comment.id,
+                                )
+                              }
+                            >
+                              삭제
+                            </button>
+                          </div>
+                          <p>{comment.content}</p>
+                          {isCommentMenuOpen ? (
+                            <div className="delete-row compact">
+                              <input
+                                placeholder="댓글 비밀번호"
+                                type="password"
+                                value={deletePasswords[`comment-${comment.id}`] ?? ""}
+                                onChange={(event) =>
+                                  setDeletePasswords((current) => ({
+                                    ...current,
+                                    [`comment-${comment.id}`]: event.target.value,
+                                  }))
+                                }
+                              />
+                              <button type="button" onClick={() => void deleteComment(comment.id)}>
+                                확인
+                              </button>
+                            </div>
+                          ) : null}
+                        </div>
+                      );
+                    })}
+
+                    {isCommentFormOpen ? (
+                      <form
+                        className="comment-form"
+                        onSubmit={(event) => void createComment(post.id, event)}
+                      >
+                        <input
+                          aria-label="댓글 닉네임"
+                          value={commentForm.nickname}
+                          onChange={(event) => updateCommentForm(post.id, { nickname: event.target.value })}
+                        />
+                        <input
+                          aria-label="댓글 임시 비밀번호"
+                          placeholder="비밀번호"
+                          type="password"
+                          value={commentForm.password}
+                          onChange={(event) => updateCommentForm(post.id, { password: event.target.value })}
+                        />
+                        <textarea
+                          aria-label="댓글 내용"
+                          placeholder="댓글을 남겨주세요"
+                          rows={3}
+                          value={commentForm.content}
+                          onChange={(event) => updateCommentForm(post.id, { content: event.target.value })}
+                        />
+                        <button type="submit">댓글 등록</button>
+                      </form>
+                    ) : null}
+                  </section>
+                </div>
+              ) : null}
             </article>
           );
         })}
