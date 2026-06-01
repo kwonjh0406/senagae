@@ -998,6 +998,36 @@ h1 {
   max-width: 1180px;
 }
 
+.community-toolbar {
+  align-items: center;
+  background: #ffffff;
+  border: 4px solid var(--ink);
+  border-radius: 8px;
+  box-shadow: 8px 8px 0 var(--ink);
+  display: flex;
+  gap: 16px;
+  justify-content: space-between;
+  padding: 18px 20px;
+}
+
+.community-toolbar div {
+  align-items: baseline;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.community-toolbar strong {
+  font-size: 24px;
+  font-weight: 1000;
+}
+
+.community-toolbar span {
+  color: rgba(61, 43, 31, 0.72);
+  font-size: 15px;
+  font-weight: 900;
+}
+
 .community-composer,
 .community-post {
   background: #fffdf0;
@@ -1056,6 +1086,7 @@ h1 {
   resize: vertical;
 }
 
+.community-toolbar button,
 .community-composer button,
 .comment-form button,
 .delete-row button {
@@ -1323,6 +1354,11 @@ h1 {
 
   .community-composer {
     grid-template-columns: 1fr;
+  }
+
+  .community-toolbar {
+    align-items: stretch;
+    flex-direction: column;
   }
 
   .delete-row {

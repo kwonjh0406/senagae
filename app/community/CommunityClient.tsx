@@ -34,6 +34,7 @@ async function readMessage(response: Response) {
 export function CommunityClient({ initialNickname }: { initialNickname: string }) {
   const [posts, setPosts] = useState<Post[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [isComposerOpen, setIsComposerOpen] = useState(false);
   const [message, setMessage] = useState("");
   const [postForm, setPostForm] = useState({
     content: "",
@@ -111,6 +112,7 @@ export function CommunityClient({ initialNickname }: { initialNickname: string }
     }
 
     setPostForm({ content: "", nickname: makeNickname(), password: "", title: "" });
+    setIsComposerOpen(false);
     setMessage("글이 등록되었습니다.");
     await loadPosts();
   }
@@ -175,44 +177,56 @@ export function CommunityClient({ initialNickname }: { initialNickname: string }
 
   return (
     <section className="community-shell">
-      <form className="community-composer" onSubmit={createPost}>
-        <div className="board-title">
-          <span>글쓰기</span>
-          <strong>로그인 없음</strong>
+      <div className="community-toolbar">
+        <div>
+          <strong>개미 게시판</strong>
+          <span>전체 {posts.length}개 글</span>
         </div>
-        <label>
-          닉네임
-          <input
-            value={postForm.nickname}
-            onChange={(event) => setPostForm({ ...postForm, nickname: event.target.value })}
-          />
-        </label>
-        <label>
-          임시 비밀번호
-          <input
-            minLength={4}
-            type="password"
-            value={postForm.password}
-            onChange={(event) => setPostForm({ ...postForm, password: event.target.value })}
-          />
-        </label>
-        <label className="wide-field">
-          제목
-          <input
-            value={postForm.title}
-            onChange={(event) => setPostForm({ ...postForm, title: event.target.value })}
-          />
-        </label>
-        <label className="wide-field">
-          내용
-          <textarea
-            rows={6}
-            value={postForm.content}
-            onChange={(event) => setPostForm({ ...postForm, content: event.target.value })}
-          />
-        </label>
-        <button type="submit">글 등록</button>
-      </form>
+        <button type="button" onClick={() => setIsComposerOpen((open) => !open)}>
+          {isComposerOpen ? "닫기" : "글쓰기"}
+        </button>
+      </div>
+
+      {isComposerOpen ? (
+        <form className="community-composer" onSubmit={createPost}>
+          <div className="board-title">
+            <span>글쓰기</span>
+            <strong>로그인 없음</strong>
+          </div>
+          <label>
+            닉네임
+            <input
+              value={postForm.nickname}
+              onChange={(event) => setPostForm({ ...postForm, nickname: event.target.value })}
+            />
+          </label>
+          <label>
+            임시 비밀번호
+            <input
+              minLength={4}
+              type="password"
+              value={postForm.password}
+              onChange={(event) => setPostForm({ ...postForm, password: event.target.value })}
+            />
+          </label>
+          <label className="wide-field">
+            제목
+            <input
+              value={postForm.title}
+              onChange={(event) => setPostForm({ ...postForm, title: event.target.value })}
+            />
+          </label>
+          <label className="wide-field">
+            내용
+            <textarea
+              rows={6}
+              value={postForm.content}
+              onChange={(event) => setPostForm({ ...postForm, content: event.target.value })}
+            />
+          </label>
+          <button type="submit">글 등록</button>
+        </form>
+      ) : null}
 
       {message ? <p className="community-message">{message}</p> : null}
 
