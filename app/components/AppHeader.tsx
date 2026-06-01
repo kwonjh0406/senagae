@@ -11,7 +11,6 @@ type SubNavItem = {
 
 const mainNavItems: { href: string; key: MainSection; label: string }[] = [
   { href: "/", key: "home", label: "홈" },
-  { href: "/guide", key: "guide", label: "가이드" },
   { href: "/news", key: "news", label: "뉴스·이벤트" },
   { href: "/market", key: "market", label: "증시 현황" },
   { href: "/analysis", key: "analysis", label: "종목 분석" },

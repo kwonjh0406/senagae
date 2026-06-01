@@ -3,7 +3,6 @@ import { AppHeader } from "./components/AppHeader";
 
 const featureTiles = [
   { title: "오늘의 장터", text: "시장 흐름과 주요 이슈가 모이는 곳", color: "tile-mint" },
-  { title: "개미 교실", text: "처음 투자하는 사람도 편하게 읽는 가이드", color: "tile-yellow" },
   { title: "증권사 가게", text: "수수료와 혜택을 한눈에 비교하는 코너", color: "tile-pink" },
   { title: "종목 놀이터", text: "관심 종목을 귀엽게 정리하는 공간", color: "tile-blue" },
 ];
@@ -76,13 +75,21 @@ export default function Home() {
           <h2>나중에 커질 기능들을 먼저 귀엽게 배치했어요</h2>
         </div>
 
+        <Link className="learning-guide-callout" href="/guide">
+          <span>주린이 출발점</span>
+          <div>
+            <h3>주식이 아직 어렵다면?</h3>
+            <p>주식에 대한 필수 기본 지식을 차근차근 배우는 학습 가이드로 시작해보세요.</p>
+          </div>
+          <strong>가이드</strong>
+        </Link>
+
         <div className="feature-grid">
           {featureTiles.map((tile) => (
             <article className={`feature-tile ${tile.color}`} key={tile.title}>
               <div className="tile-icon" aria-hidden="true" />
               <h3>{tile.title}</h3>
               <p>{tile.text}</p>
-              {tile.title === "개미 교실" ? <Link href="/guide">가이드 열기</Link> : null}
             </article>
           ))}
         </div>
