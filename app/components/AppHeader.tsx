@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 
 type MainSection = "analysis" | "community" | "guide" | "home" | "market" | "news";
 
@@ -30,9 +31,7 @@ export function AppHeader({
     <header className="app-header">
       <div className="app-header-main">
         <Link className="brand-mark" href="/" aria-label="세상에 나쁜 개미는 없다 홈">
-          <span className="brand-ant" aria-hidden="true">
-            <span />
-          </span>
+          <Image className="brand-logo" src="/senagae-logo.png" alt="" width={64} height={43} priority />
           <span>세나개</span>
         </Link>
         <nav className="primary-nav" aria-label="주요 메뉴">
