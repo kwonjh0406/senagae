@@ -12,6 +12,7 @@ import type {
   Signal,
   TrendMode,
 } from "./types";
+import krxListing from "./krx-listing.json";
 
 const MIN_BARS = 80;
 
@@ -48,6 +49,14 @@ const KOREAN_CODE_NAMES = Object.values(KOREAN_SYMBOLS).reduce<Record<string, st
   acc[item.code] = item.name;
   return acc;
 }, {});
+
+type KrxListingRow = {
+  code: string;
+  market: "KOSDAQ" | "KOSPI";
+  name: string;
+};
+
+const KRX_LISTING = krxListing as KrxListingRow[];
 
 type ResolvedSymbol = {
   userSymbol: string;
@@ -114,7 +123,40 @@ function resolveInputSymbol(input: string) {
 
   if (/^\d{1,6}$/.test(raw)) {
     const code = raw.padStart(6, "0");
+    const listed = KRX_LISTING.find((row) => row.code === code);
+    if (listed) {
+      return { code, name: listed.name, preferredMarket: listed.market as MarketName };
+    }
     return { code, name: KOREAN_CODE_NAMES[code] ?? code, preferredMarket: undefined as MarketName | undefined };
+  }
+
+  const exactName = KRX_LISTING.find((row) => row.name.toLowerCase() === lowered);
+  if (exactName) {
+    return { code: exactName.code, name: exactName.name, preferredMarket: exactName.market as MarketName };
+  }
+
+  const startsWith = KRX_LISTING.filter((row) => row.name.toLowerCase().startsWith(lowered));
+  if (startsWith.length === 1) {
+    const [listed] = startsWith;
+    return { code: listed.code, name: listed.name, preferredMarket: listed.market as MarketName };
+  }
+
+  const contains = KRX_LISTING.filter((row) => row.name.toLowerCase().includes(lowered));
+  if (contains.length === 1) {
+    const [listed] = contains;
+    return { code: listed.code, name: listed.name, preferredMarket: listed.market as MarketName };
+  }
+
+  const suggestions = [...startsWith, ...contains]
+    .filter((row, index, rows) => rows.findIndex((item) => item.code === row.code) === index)
+    .slice(0, 5);
+  if (suggestions.length > 0) {
+    const formatted = suggestions.map((row) => `${row.name}(${row.code})`).join(", ");
+    throw new Error(`'${raw}' 검색 결과가 여러 개입니다. 예: ${formatted}`);
+  }
+
+  if (/[ㄱ-ㅎㅏ-ㅣ가-힣]/.test(raw)) {
+    throw new Error(`종목을 찾지 못했습니다: '${raw}'. 종목명 또는 6자리 코드를 입력해주세요.`);
   }
 
   return { code: raw.toUpperCase(), name: raw.toUpperCase(), preferredMarket: "NASDAQ" as MarketName };
@@ -166,6 +208,16 @@ async function fetchYahooCandles(yahooSymbol: string): Promise<PriceCandle[]> {
 
 async function resolveSymbol(input: string): Promise<ResolvedSymbol> {
   const resolved = resolveInputSymbol(input);
+
+  if (resolved.preferredMarket === "KOSPI" || resolved.preferredMarket === "KOSDAQ") {
+    return {
+      userSymbol: resolved.code,
+      dataSymbol: resolved.code,
+      market: resolved.preferredMarket,
+      name: resolved.name,
+      yahooSymbol: `${resolved.code}.${resolved.preferredMarket === "KOSPI" ? "KS" : "KQ"}`,
+    };
+  }
 
   if (resolved.preferredMarket === "NASDAQ") {
     return {
