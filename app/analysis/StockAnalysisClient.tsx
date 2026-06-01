@@ -33,27 +33,108 @@ function formatPct(value: number) {
   return `${value > 0 ? "+" : ""}${formatNumber(value)}%`;
 }
 
-function MiniChart({ data }: { data: AnalyzeResponse["chart"] }) {
-  const path = useMemo(() => {
-    if (!data.length) return "";
-    const closes = data.map((row) => row.close);
-    const min = Math.min(...closes);
-    const max = Math.max(...closes);
+function AnalysisChart({ data }: { data: AnalyzeResponse["chart"] }) {
+  const chart = useMemo(() => {
+    const width = 760;
+    const height = 360;
+    const pad = { bottom: 44, left: 18, right: 70, top: 24 };
+    const plotWidth = width - pad.left - pad.right;
+    const plotHeight = 228;
+    const volumeTop = pad.top + plotHeight + 22;
+    const volumeHeight = height - volumeTop - pad.bottom;
+    const prices = data.flatMap((row) => [row.high, row.low, row.ma20, row.ma60].filter((value): value is number => value !== null));
+    const minPrice = Math.min(...prices);
+    const maxPrice = Math.max(...prices);
+    const pricePadding = (maxPrice - minPrice || maxPrice || 1) * 0.08;
+    const min = minPrice - pricePadding;
+    const max = maxPrice + pricePadding;
     const range = max - min || 1;
-    return closes
-      .map((close, index) => {
-        const x = (index / Math.max(closes.length - 1, 1)) * 100;
-        const y = 92 - ((close - min) / range) * 80;
-        return `${index === 0 ? "M" : "L"} ${x.toFixed(2)} ${y.toFixed(2)}`;
-      })
-      .join(" ");
+    const xStep = plotWidth / Math.max(data.length - 1, 1);
+    const candleWidth = Math.max(4, Math.min(10, xStep * 0.58));
+    const maxVolume = Math.max(...data.map((row) => row.volume), 1);
+
+    const x = (index: number) => pad.left + index * xStep;
+    const y = (value: number) => pad.top + ((max - value) / range) * plotHeight;
+    const volumeY = (value: number) => volumeTop + volumeHeight - (value / maxVolume) * volumeHeight;
+
+    const linePath = (key: "ma20" | "ma60") =>
+      data
+        .map((row, index) => {
+          const value = row[key];
+          if (value === null) return "";
+          return `${index === 0 ? "M" : "L"} ${x(index).toFixed(2)} ${y(value).toFixed(2)}`;
+        })
+        .filter(Boolean)
+        .join(" ");
+
+    const priceTicks = [0, 0.25, 0.5, 0.75, 1].map((ratio) => {
+      const value = max - range * ratio;
+      return { value, y: pad.top + plotHeight * ratio };
+    });
+
+    return {
+      candleWidth,
+      height,
+      line20: linePath("ma20"),
+      line60: linePath("ma60"),
+      pad,
+      priceTicks,
+      volumeHeight,
+      volumeTop,
+      volumeY,
+      width,
+      x,
+      y,
+    };
   }, [data]);
 
   return (
-    <svg className="analysis-chart" viewBox="0 0 100 100" role="img" aria-label="최근 60일 가격 흐름">
-      <path d="M 0 92 H 100" />
-      <path d={path} />
-    </svg>
+    <div className="analysis-chart-wrap">
+      <div className="chart-toolbar">
+        <span>최근 60거래일</span>
+        <strong>캔들 + MA20 + MA60</strong>
+      </div>
+      <svg className="analysis-chart" viewBox={`0 0 ${chart.width} ${chart.height}`} role="img" aria-label="최근 60일 캔들 차트">
+        <rect className="chart-bg" height={chart.height} width={chart.width} x="0" y="0" />
+        {chart.priceTicks.map((tick) => (
+          <g className="chart-grid-line" key={tick.y}>
+            <line x1={chart.pad.left} x2={chart.width - chart.pad.right} y1={tick.y} y2={tick.y} />
+            <text x={chart.width - chart.pad.right + 12} y={tick.y + 5}>
+              {formatNumber(tick.value)}
+            </text>
+          </g>
+        ))}
+        <line className="chart-axis" x1={chart.pad.left} x2={chart.width - chart.pad.right} y1={chart.volumeTop + chart.volumeHeight} y2={chart.volumeTop + chart.volumeHeight} />
+        {data.map((row, index) => {
+          const x = chart.x(index);
+          const isUp = row.close >= row.open;
+          const top = chart.y(Math.max(row.open, row.close));
+          const bottom = chart.y(Math.min(row.open, row.close));
+          const bodyHeight = Math.max(2, bottom - top);
+          return (
+            <g className={isUp ? "candle up" : "candle down"} key={row.date}>
+              <line x1={x} x2={x} y1={chart.y(row.high)} y2={chart.y(row.low)} />
+              <rect height={bodyHeight} width={chart.candleWidth} x={x - chart.candleWidth / 2} y={top} />
+              <rect
+                className="volume-bar"
+                height={chart.volumeTop + chart.volumeHeight - chart.volumeY(row.volume)}
+                width={chart.candleWidth}
+                x={x - chart.candleWidth / 2}
+                y={chart.volumeY(row.volume)}
+              />
+            </g>
+          );
+        })}
+        <path className="ma-line ma20" d={chart.line20} />
+        <path className="ma-line ma60" d={chart.line60} />
+      </svg>
+      <div className="chart-legend">
+        <span><i className="up" />상승 캔들</span>
+        <span><i className="down" />하락 캔들</span>
+        <span><i className="ma20" />MA20</span>
+        <span><i className="ma60" />MA60</span>
+      </div>
+    </div>
   );
 }
 
@@ -159,7 +240,7 @@ export function StockAnalysisClient({
               <strong>{formatNumber(analysis.price)}</strong>
               <em>{analysis.asOf} 기준</em>
             </div>
-            <MiniChart data={analysis.chart} />
+            <AnalysisChart data={analysis.chart} />
           </article>
 
           <article className="analysis-breakdown-card">
