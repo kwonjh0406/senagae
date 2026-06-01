@@ -1,3 +1,5 @@
+import Link from "next/link";
+
 const menuItems = ["투자정보", "뉴스", "종목방", "수수료", "환율", "커뮤니티"];
 
 const featureTiles = [
@@ -19,13 +21,16 @@ export default function Home() {
     <main className="min-h-screen overflow-hidden bg-[#fff7d7] text-[#3d2b1f]">
       <section className="hero-shell">
         <header className="site-header" aria-label="서비스 소개">
-          <a className="brand-mark" href="#" aria-label="세상에 나쁜 개미는 없다 홈">
+          <Link className="brand-mark" href="/" aria-label="세상에 나쁜 개미는 없다 홈">
             <span className="brand-ant" aria-hidden="true">
               <span />
             </span>
             <span>세나개</span>
-          </a>
+          </Link>
           <nav className="nav-tabs" aria-label="준비 중인 메뉴">
+            <Link className="active-tab" href="/guide">
+              가이드
+            </Link>
             {menuItems.map((item) => (
               <a href="#" key={item}>
                 {item}
@@ -43,7 +48,7 @@ export default function Home() {
               환율까지 한곳에 모으는 귀여운 주식 놀이터입니다.
             </p>
             <div className="hero-actions" aria-label="초안 상태">
-              <span>초안 디자인</span>
+              <Link href="/guide">가이드 먼저 보기</Link>
               <span>기능은 아직 쉬는 중</span>
             </div>
           </div>
@@ -95,6 +100,7 @@ export default function Home() {
               <div className="tile-icon" aria-hidden="true" />
               <h3>{tile.title}</h3>
               <p>{tile.text}</p>
+              {tile.title === "개미 교실" ? <Link href="/guide">가이드 열기</Link> : null}
             </article>
           ))}
         </div>
