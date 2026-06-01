@@ -1,6 +1,6 @@
 import Link from "next/link";
 
-type MainSection = "community" | "guide" | "home";
+type MainSection = "community" | "guide" | "home" | "market" | "news";
 
 type SubNavItem = {
   href: string;
@@ -11,6 +11,8 @@ type SubNavItem = {
 const mainNavItems: { href: string; key: MainSection; label: string }[] = [
   { href: "/", key: "home", label: "홈" },
   { href: "/guide", key: "guide", label: "가이드" },
+  { href: "/news", key: "news", label: "뉴스·이벤트" },
+  { href: "/market", key: "market", label: "증시 현황" },
   { href: "/community", key: "community", label: "커뮤니티" },
 ];
 
@@ -44,6 +46,12 @@ export function AppHeader({
             </Link>
           ))}
         </nav>
+      </div>
+
+      <div className="stock-search" role="search" aria-label="종목 검색">
+        <label htmlFor="stock-search-input">종목 검색</label>
+        <input id="stock-search-input" placeholder="종목명 또는 티커를 입력하세요" />
+        <button type="button">검색</button>
       </div>
 
       {subNavItems?.length ? (
