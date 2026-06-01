@@ -1979,7 +1979,24 @@ h1 {
   }
 
   .stock-search {
-    grid-template-columns: 1fr;
+    gap: 8px;
+    grid-template-columns: minmax(0, 1fr) auto;
+    margin-top: 10px;
+    padding: 8px;
+  }
+
+  .stock-search label {
+    display: none;
+  }
+
+  .stock-search input {
+    font-size: 14px;
+    padding: 8px 10px;
+  }
+
+  .stock-search button {
+    font-size: 14px;
+    padding: 8px 10px;
   }
 
   .article-hero {

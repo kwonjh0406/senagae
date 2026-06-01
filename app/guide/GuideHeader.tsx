@@ -15,7 +15,6 @@ export function GuideHeader({ current = "/guide" }: { current?: string }) {
         ...item,
         isActive: item.href === current,
       }))}
-      subNavLabel="가이드 코너"
     />
   );
 }
