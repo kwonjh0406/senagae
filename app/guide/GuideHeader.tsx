@@ -6,6 +6,7 @@ const navItems = [
   { label: "용어", href: "/guide/terms" },
   { label: "차트", href: "/guide/charts" },
   { label: "체크리스트", href: "/guide/checklist" },
+  { label: "커뮤니티", href: "/community" },
 ];
 
 export function GuideHeader() {

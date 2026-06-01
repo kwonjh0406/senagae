@@ -636,7 +636,8 @@ h1 {
   font-weight: 1000;
 }
 
-.board-title strong {
+.board-title strong,
+.board-title a {
   background: #ffffff;
   border: 2px solid var(--ink);
   border-radius: 999px;
@@ -986,6 +987,214 @@ h1 {
   background: var(--green);
 }
 
+.community-hero {
+  margin-bottom: 42px;
+}
+
+.community-shell {
+  display: grid;
+  gap: 28px;
+  margin: 0 auto;
+  max-width: 1180px;
+}
+
+.community-composer,
+.community-post {
+  background: #fffdf0;
+  border: 4px solid var(--ink);
+  border-radius: 8px;
+  box-shadow: 9px 9px 0 var(--ink);
+}
+
+.community-composer {
+  display: grid;
+  gap: 16px;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  padding: 0 22px 22px;
+}
+
+.community-composer .board-title {
+  grid-column: 1 / -1;
+  margin: 0 -22px;
+}
+
+.community-composer label,
+.comment-form {
+  display: grid;
+  gap: 8px;
+}
+
+.community-composer label {
+  font-size: 15px;
+  font-weight: 1000;
+}
+
+.wide-field {
+  grid-column: 1 / -1;
+}
+
+.community-composer input,
+.community-composer textarea,
+.comment-form input,
+.comment-form textarea,
+.delete-row input {
+  background: #ffffff;
+  border: 3px solid var(--ink);
+  border-radius: 8px;
+  color: var(--ink);
+  font: inherit;
+  font-size: 16px;
+  font-weight: 800;
+  min-width: 0;
+  padding: 12px 13px;
+  width: 100%;
+}
+
+.community-composer textarea,
+.comment-form textarea {
+  line-height: 1.55;
+  resize: vertical;
+}
+
+.community-composer button,
+.comment-form button,
+.delete-row button {
+  background: var(--yellow);
+  border: 3px solid var(--ink);
+  border-radius: 8px;
+  box-shadow: 0 4px 0 var(--ink);
+  color: var(--ink);
+  cursor: pointer;
+  font: inherit;
+  font-size: 16px;
+  font-weight: 1000;
+  padding: 12px 16px;
+}
+
+.community-composer > button {
+  grid-column: 1 / -1;
+  justify-self: start;
+}
+
+.community-message,
+.empty-board {
+  background: #ffffff;
+  border: 3px solid var(--ink);
+  border-radius: 8px;
+  box-shadow: 0 5px 0 var(--ink);
+  font-size: 17px;
+  font-weight: 900;
+  margin: 0;
+  padding: 14px 16px;
+}
+
+.community-list {
+  display: grid;
+  gap: 22px;
+}
+
+.community-post {
+  padding: 24px;
+}
+
+.community-post header div,
+.comment-item div:first-child {
+  align-items: center;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.community-post header span,
+.comment-item strong {
+  background: var(--green);
+  border: 2px solid var(--ink);
+  border-radius: 999px;
+  color: #ffffff;
+  font-size: 14px;
+  font-weight: 1000;
+  padding: 6px 11px;
+}
+
+.community-post time,
+.comment-item time {
+  color: rgba(61, 43, 31, 0.72);
+  font-size: 13px;
+  font-weight: 800;
+}
+
+.community-post h2 {
+  font-size: clamp(27px, 4vw, 40px);
+  font-weight: 1000;
+  line-height: 1.15;
+  margin: 16px 0 12px;
+  word-break: keep-all;
+}
+
+.community-post > p {
+  background: #ffffff;
+  border: 2px dashed rgba(61, 43, 31, 0.45);
+  border-radius: 8px;
+  font-size: 17px;
+  font-weight: 800;
+  line-height: 1.65;
+  margin: 0 0 18px;
+  padding: 16px;
+  white-space: pre-wrap;
+  word-break: keep-all;
+}
+
+.delete-row {
+  display: flex;
+  gap: 10px;
+  margin: 12px 0 0;
+  max-width: 420px;
+}
+
+.delete-row button {
+  background: var(--pink);
+  flex: 0 0 auto;
+}
+
+.delete-row.compact {
+  margin-top: 10px;
+}
+
+.comment-box {
+  background: #eaf8ff;
+  border: 3px solid var(--ink);
+  border-radius: 8px;
+  margin-top: 22px;
+  padding: 18px;
+}
+
+.comment-box h3 {
+  font-size: 20px;
+  font-weight: 1000;
+  margin: 0 0 12px;
+}
+
+.comment-item {
+  background: #ffffff;
+  border: 2px solid rgba(61, 43, 31, 0.55);
+  border-radius: 8px;
+  margin-bottom: 12px;
+  padding: 14px;
+}
+
+.comment-item p {
+  font-size: 15px;
+  font-weight: 800;
+  line-height: 1.55;
+  margin: 10px 0 0;
+  white-space: pre-wrap;
+}
+
+.comment-form {
+  grid-template-columns: minmax(140px, 0.8fr) minmax(140px, 0.8fr) minmax(220px, 1.4fr) auto;
+  margin-top: 16px;
+}
+
 @media (max-width: 920px) {
   .site-header {
     align-items: flex-start;
@@ -1022,6 +1231,10 @@ h1 {
     align-self: stretch;
     flex-basis: auto;
     width: 100%;
+  }
+
+  .comment-form {
+    grid-template-columns: 1fr;
   }
 }
 
@@ -1105,6 +1318,19 @@ h1 {
   }
 
   .article-footer a {
+    width: 100%;
+  }
+
+  .community-composer {
+    grid-template-columns: 1fr;
+  }
+
+  .delete-row {
+    flex-direction: column;
+    max-width: none;
+  }
+
+  .delete-row button {
     width: 100%;
   }
 }

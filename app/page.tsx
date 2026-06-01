@@ -1,6 +1,13 @@
 import Link from "next/link";
 
-const menuItems = ["투자정보", "뉴스", "종목방", "수수료", "환율", "커뮤니티"];
+const menuItems = [
+  { href: "#", label: "투자정보" },
+  { href: "#", label: "뉴스" },
+  { href: "#", label: "종목방" },
+  { href: "#", label: "수수료" },
+  { href: "#", label: "환율" },
+  { href: "/community", label: "커뮤니티" },
+];
 
 const featureTiles = [
   { title: "오늘의 장터", text: "시장 흐름과 주요 이슈가 모이는 곳", color: "tile-mint" },
@@ -32,9 +39,9 @@ export default function Home() {
               가이드
             </Link>
             {menuItems.map((item) => (
-              <a href="#" key={item}>
-                {item}
-              </a>
+              <Link href={item.href} key={item.label}>
+                {item.label}
+              </Link>
             ))}
           </nav>
         </header>
@@ -110,7 +117,7 @@ export default function Home() {
         <div className="notice-board">
           <div className="board-title">
             <span>개미 게시판</span>
-            <strong>새 글</strong>
+            <Link href="/community">입장</Link>
           </div>
           <ul>
             {boardPosts.map((post) => (
