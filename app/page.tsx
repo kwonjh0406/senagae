@@ -1,17 +1,42 @@
 import Link from "next/link";
 import { AppHeader } from "./components/AppHeader";
 
-const featureTiles = [
-  { title: "오늘의 장터", text: "시장 흐름과 주요 이슈가 모이는 곳", color: "tile-mint" },
-  { title: "증권사 가게", text: "수수료와 혜택을 한눈에 비교하는 코너", color: "tile-pink" },
-  { title: "종목 놀이터", text: "관심 종목을 귀엽게 정리하는 공간", color: "tile-blue" },
+const hubActions = [
+  {
+    color: "hub-yellow",
+    eyebrow: "처음이라면",
+    href: "/guide",
+    title: "주린이 가이드",
+    text: "용어, 차트, 주문 전 체크리스트부터 차근차근 배워요.",
+  },
+  {
+    color: "hub-green",
+    eyebrow: "오늘 시장",
+    href: "/market",
+    title: "증시 현황",
+    text: "국내외 지수, 환율, 공포·탐욕 흐름을 한 번에 봐요.",
+  },
+  {
+    color: "hub-blue",
+    eyebrow: "종목이 있다면",
+    href: "/analysis",
+    title: "종목 분석",
+    text: "이동평균과 변동성 흐름으로 진입 점수를 확인해요.",
+  },
+  {
+    color: "hub-pink",
+    eyebrow: "소식 모음",
+    href: "/news",
+    title: "뉴스·이벤트",
+    text: "뉴스, 공모주, 배당, 증권사 이벤트를 놓치지 않게 모아요.",
+  },
 ];
 
-const boardPosts = [
-  "초보 개미를 위한 오늘의 단어장",
-  "배당주 고르는 법, 쉬운 그림으로 보기",
-  "증권사 이벤트 모아보기 준비중",
-  "달러 환율이 오르면 무슨 일이 생길까?",
+const checkItems = [
+  "시장 분위기 먼저 보기",
+  "관심 종목 점수 확인하기",
+  "모르는 단어는 가이드에서 정리하기",
+  "궁금한 건 커뮤니티에 남기기",
 ];
 
 export default function Home() {
@@ -22,106 +47,79 @@ export default function Home() {
 
         <div className="hero-grid">
           <div className="hero-copy">
-            <p className="eyebrow">통합 주식 플랫폼 준비중</p>
+            <p className="eyebrow">세나개 투자 출발판</p>
             <h1>세상에 나쁜 개미는 없다</h1>
             <p className="hero-description">
-              투자 정보, 뉴스, 가이드, 증권사 수수료, 종목 이야기, 커뮤니티와
-              환율까지 한곳에 모으는 귀여운 주식 놀이터입니다.
+              시장 흐름을 보고, 종목을 분석하고, 모르는 개념은 바로 배우는
+              초보 친화 주식 허브입니다.
             </p>
             <div className="hero-actions" aria-label="초안 상태">
-              <Link href="/guide">가이드 먼저 보기</Link>
-              <span>기능은 아직 쉬는 중</span>
+              <Link href="/market">오늘 시장 보기</Link>
+              <Link href="/analysis">종목 분석하기</Link>
             </div>
           </div>
 
-          <div className="browser-scene" aria-label="서비스 미리보기 일러스트">
-            <div className="window-bar">
-              <span />
-              <span />
-              <span />
-              <strong>senagae.kr</strong>
+          <section className="home-hub-panel" aria-label="세나개 주요 기능">
+            <div className="hub-panel-title">
+              <span>오늘 어디부터 볼까요?</span>
+              <strong>4개 코너</strong>
             </div>
-            <div className="mascot-stage">
-              <div className="sun-badge">OPEN SOON</div>
-              <div className="ant-mascot" aria-hidden="true">
-                <i className="antenna left" />
-                <i className="antenna right" />
-                <span className="head">
-                  <b />
-                  <b />
-                </span>
-                <span className="body" />
-                <span className="belly" />
-                <i className="leg one" />
-                <i className="leg two" />
-                <i className="leg three" />
-                <i className="leg four" />
-              </div>
-              <div className="speech-bubble">오늘도 차근차근!</div>
-              <div className="mini-chart" aria-hidden="true">
-                <span />
-                <span />
-                <span />
-                <span />
-              </div>
+            <div className="hub-action-grid">
+              {hubActions.map((action) => (
+                <Link className={`hub-action-card ${action.color}`} href={action.href} key={action.title}>
+                  <span>{action.eyebrow}</span>
+                  <h2>{action.title}</h2>
+                  <p>{action.text}</p>
+                  <strong>바로가기</strong>
+                </Link>
+              ))}
             </div>
-          </div>
+          </section>
         </div>
       </section>
 
-      <section className="content-band" aria-label="준비 중인 서비스 영역">
+      <section className="content-band home-checkin-band" aria-label="오늘의 투자 체크인">
         <div className="section-title">
-          <p>세나개 마을 지도</p>
-          <h2>나중에 커질 기능들을 먼저 귀엽게 배치했어요</h2>
+          <p>오늘의 체크인</p>
+          <h2>흩어진 정보를 한 화면 흐름으로 이어봐요</h2>
         </div>
 
-        <Link className="learning-guide-callout" href="/guide">
-          <span>주린이 출발점</span>
-          <div>
-            <h3>주식이 아직 어렵다면?</h3>
-            <p>주식에 대한 필수 기본 지식을 차근차근 배우는 학습 가이드로 시작해보세요.</p>
-          </div>
-          <strong>가이드</strong>
-        </Link>
+        <div className="home-dashboard-grid">
+          <article className="home-check-card">
+            <div className="board-title">
+              <span>개미 루틴</span>
+              <strong>초보자용</strong>
+            </div>
+            <ol>
+              {checkItems.map((item) => (
+                <li key={item}>{item}</li>
+              ))}
+            </ol>
+          </article>
 
-        <div className="feature-grid">
-          {featureTiles.map((tile) => (
-            <article className={`feature-tile ${tile.color}`} key={tile.title}>
-              <div className="tile-icon" aria-hidden="true" />
-              <h3>{tile.title}</h3>
-              <p>{tile.text}</p>
-            </article>
-          ))}
-        </div>
-      </section>
+          <article className="home-market-card">
+            <div className="ticker-row up">
+              <span>코스피</span>
+              <strong>흐름 확인</strong>
+            </div>
+            <div className="ticker-row">
+              <span>환율</span>
+              <strong>시장 온도</strong>
+            </div>
+            <div className="ticker-row up">
+              <span>공포·탐욕</span>
+              <strong>심리 체크</strong>
+            </div>
+            <Link href="/market">대시보드 보기</Link>
+          </article>
 
-      <section className="dashboard-band" aria-label="커뮤니티와 정보 박스 미리보기">
-        <div className="notice-board">
-          <div className="board-title">
-            <span>개미 게시판</span>
-            <Link href="/community">입장</Link>
-          </div>
-          <ul>
-            {boardPosts.map((post) => (
-              <li key={post}>{post}</li>
-            ))}
-          </ul>
-        </div>
-
-        <div className="ticker-box" aria-label="예시 시세판">
-          <div className="ticker-row up">
-            <span>코스피</span>
-            <strong>2,999.99</strong>
-          </div>
-          <div className="ticker-row">
-            <span>원달러</span>
-            <strong>1,234.50</strong>
-          </div>
-          <div className="ticker-row up">
-            <span>개미지수</span>
-            <strong>100점</strong>
-          </div>
-          <p>실제 데이터가 아닌 디자인용 예시입니다.</p>
+          <article className="home-community-card">
+            <div className="board-title">
+              <span>개미 게시판</span>
+              <Link href="/community">입장</Link>
+            </div>
+            <p>혼자 헷갈리는 뉴스와 종목 이야기를 가볍게 남겨보세요.</p>
+          </article>
         </div>
       </section>
     </main>

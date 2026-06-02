@@ -33,25 +33,30 @@ export function AppHeader({
           <Image className="brand-logo" src="/senagae-logo.png" alt="" width={64} height={43} priority />
           <span>세나개</span>
         </Link>
-        <nav className="primary-nav" aria-label="주요 메뉴">
-          {mainNavItems.map((item) => (
-            <Link
-              aria-current={active === item.key ? "page" : undefined}
-              className={active === item.key ? "is-active" : undefined}
-              href={item.href}
-              key={item.key}
-            >
-              {item.label}
-            </Link>
-          ))}
-        </nav>
-      </div>
+        <div className="header-tools">
+          <nav className="primary-nav" aria-label="주요 메뉴">
+            {mainNavItems.map((item) => (
+              <Link
+                aria-current={active === item.key ? "page" : undefined}
+                className={active === item.key ? "is-active" : undefined}
+                href={item.href}
+                key={item.key}
+              >
+                {item.label}
+              </Link>
+            ))}
+          </nav>
 
-      <form action="/analysis" className="stock-search" role="search" aria-label="종목 검색">
-        <label htmlFor="stock-search-input">종목 검색</label>
-        <input id="stock-search-input" name="symbol" placeholder="종목명 또는 티커를 입력하세요" />
-        <button type="submit">검색</button>
-      </form>
+          <details className="stock-search-menu">
+            <summary>종목 검색</summary>
+            <form action="/analysis" className="stock-search" role="search" aria-label="종목 검색">
+              <label htmlFor="stock-search-input">종목명 또는 티커</label>
+              <input id="stock-search-input" name="symbol" placeholder="삼성전자 또는 005930" />
+              <button type="submit">검색</button>
+            </form>
+          </details>
+        </div>
+      </div>
 
       {subNavItems?.length ? (
         <nav className="section-nav" aria-label={subNavLabel ?? "섹션 메뉴"}>
