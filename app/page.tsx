@@ -4,31 +4,31 @@ import { AppHeader } from "./components/AppHeader";
 const hubActions = [
   {
     color: "hub-yellow",
-    eyebrow: "처음이라면",
     href: "/guide",
+    kicker: "처음이라면",
     title: "주린이 가이드",
-    text: "용어, 차트, 주문 전 체크리스트부터 차근차근 배워요.",
+    text: "용어, 차트, 주문 전 체크리스트",
   },
   {
     color: "hub-green",
-    eyebrow: "오늘 시장",
     href: "/market",
+    kicker: "오늘 시장",
     title: "증시 현황",
-    text: "국내외 지수, 환율, 공포·탐욕 흐름을 한 번에 봐요.",
+    text: "지수, 환율, 공포·탐욕",
   },
   {
     color: "hub-blue",
-    eyebrow: "종목이 있다면",
     href: "/analysis",
+    kicker: "종목이 있다면",
     title: "종목 분석",
-    text: "이동평균과 변동성 흐름으로 진입 점수를 확인해요.",
+    text: "이동평균과 변동성 점수",
   },
   {
     color: "hub-pink",
-    eyebrow: "소식 모음",
     href: "/news",
+    kicker: "소식 모음",
     title: "뉴스·이벤트",
-    text: "뉴스, 공모주, 배당, 증권사 이벤트를 놓치지 않게 모아요.",
+    text: "뉴스, 공모주, 배당 일정",
   },
 ];
 
@@ -61,16 +61,19 @@ export default function Home() {
 
           <section className="home-hub-panel" aria-label="세나개 주요 기능">
             <div className="hub-panel-title">
-              <span>오늘 어디부터 볼까요?</span>
-              <strong>4개 코너</strong>
+              <span>오늘의 출발점</span>
+              <h2>필요한 메뉴만 빠르게</h2>
             </div>
             <div className="hub-action-grid">
               {hubActions.map((action) => (
                 <Link className={`hub-action-card ${action.color}`} href={action.href} key={action.title}>
-                  <span>{action.eyebrow}</span>
-                  <h2>{action.title}</h2>
-                  <p>{action.text}</p>
-                  <strong>바로가기</strong>
+                  <i aria-hidden="true" />
+                  <div>
+                    <span>{action.kicker}</span>
+                    <h3>{action.title}</h3>
+                    <p>{action.text}</p>
+                  </div>
+                  <strong>→</strong>
                 </Link>
               ))}
             </div>
