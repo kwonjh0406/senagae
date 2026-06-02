@@ -4,36 +4,41 @@ import { AppHeader } from "./components/AppHeader";
 const quickLinks = [
   {
     href: "/market",
+    color: "mint",
     label: "증시 현황",
-    meta: "지수 · 환율 · 심리",
+    meta: "지수 · 환율 · 공포탐욕",
   },
   {
     href: "/analysis",
+    color: "blue",
     label: "종목 분석",
-    meta: "진입 점수 계산",
-  },
-  {
-    href: "/guide",
-    label: "주린이 가이드",
-    meta: "용어 · 차트 · 체크리스트",
+    meta: "이동평균 · 변동성 점수",
   },
   {
     href: "/news",
+    color: "pink",
     label: "뉴스·이벤트",
     meta: "시장 소식 · 일정",
+  },
+  {
+    href: "/community",
+    color: "yellow",
+    label: "커뮤니티",
+    meta: "질문 · 기록 · 의견",
   },
 ];
 
 const marketItems = [
-  { label: "KOSPI", value: "시장 대시보드", tone: "up" },
-  { label: "USD/KRW", value: "환율 체크", tone: "flat" },
-  { label: "공포·탐욕", value: "투자 심리", tone: "down" },
+  { change: "+0.42%", label: "KOSPI", tone: "up", value: "2,760.14" },
+  { change: "-0.18%", label: "KOSDAQ", tone: "down", value: "842.20" },
+  { change: "1,367원", label: "USD/KRW", tone: "flat", value: "환율" },
+  { change: "중립", label: "공포·탐욕", tone: "flat", value: "52" },
 ];
 
-const routines = [
-  "오늘 시장 온도 확인",
-  "관심 종목 흐름 점검",
-  "모르는 개념은 가이드에서 정리",
+const newsItems = [
+  "오늘 국내외 지수와 환율 먼저 확인",
+  "관심 종목은 분석 탭에서 점수 체크",
+  "헷갈리는 용어는 가이드에서 바로 정리",
 ];
 
 export default function Home() {
@@ -44,28 +49,31 @@ export default function Home() {
 
         <div className="home-overview">
           <section className="home-intro" aria-label="서비스 소개">
-            <p className="eyebrow">세나개 투자 홈</p>
-            <h1>오늘 볼 투자 정보를 한 화면에 정리해요</h1>
+            <p className="eyebrow">세나개 투자 데스크</p>
+            <h1>오늘 필요한 주식 정보만 가볍게 모아봐요</h1>
             <p>
-              시장 흐름, 종목 분석, 초보 가이드, 커뮤니티를 차분하게 이어주는
-              귀여운 주식 대시보드입니다.
+              시장 흐름, 종목 분석, 뉴스와 초보 가이드를 한 화면에서 바로
+              시작할 수 있게 정리했습니다.
             </p>
             <div className="home-primary-actions">
-              <Link href="/market">시장 먼저 보기</Link>
-              <Link href="/analysis">종목 분석하기</Link>
+              <Link href="/market">오늘 시장</Link>
+              <Link href="/guide">주린이 가이드</Link>
             </div>
           </section>
 
           <aside className="home-market-summary" aria-label="시장 요약">
             <div className="home-panel-heading">
-              <span>Market</span>
-              <strong>오늘의 흐름</strong>
+              <span>Market Snapshot</span>
+              <strong>시장 한눈에</strong>
             </div>
             <div className="home-market-list">
               {marketItems.map((item) => (
                 <Link className="home-market-row" href="/market" key={item.label}>
-                  <span>{item.label}</span>
-                  <strong>{item.value}</strong>
+                  <span>
+                    <b>{item.label}</b>
+                    {item.value}
+                  </span>
+                  <strong className={item.tone}>{item.change}</strong>
                   <i className={item.tone} aria-hidden="true" />
                 </Link>
               ))}
@@ -76,15 +84,16 @@ export default function Home() {
 
       <section className="home-workspace" aria-label="서비스 바로가기">
         <div className="home-section-head">
-          <span>Quick Access</span>
-          <h2>필요한 기능으로 바로 이동</h2>
+          <span>Senagae Board</span>
+          <h2>필요한 기능만 빠르게</h2>
         </div>
 
         <div className="home-quick-grid">
           {quickLinks.map((item) => (
-            <Link className="home-quick-card" href={item.href} key={item.href}>
+            <Link className={`home-quick-card ${item.color}`} href={item.href} key={item.href}>
               <span>{item.meta}</span>
               <strong>{item.label}</strong>
+              <em>바로가기</em>
             </Link>
           ))}
         </div>
@@ -92,23 +101,23 @@ export default function Home() {
         <div className="home-lower-grid">
           <article className="home-routine-panel">
             <div className="home-panel-heading">
-              <span>Routine</span>
-              <strong>초보 개미 루틴</strong>
+              <span>Start</span>
+              <strong>오늘의 체크</strong>
             </div>
-            <ol>
-              {routines.map((item) => (
+            <ul>
+              {newsItems.map((item) => (
                 <li key={item}>{item}</li>
               ))}
-            </ol>
+            </ul>
           </article>
 
           <article className="home-community-panel">
             <div className="home-panel-heading">
-              <span>Community</span>
-              <strong>헷갈리는 건 같이 보기</strong>
+              <span>Beginner Guide</span>
+              <strong>아직 주린이라면</strong>
             </div>
-            <p>뉴스 해석, 종목 질문, 초보 고민을 가볍게 남길 수 있습니다.</p>
-            <Link href="/community">커뮤니티 입장</Link>
+            <p>주식 필수 용어, 차트 보는 법, 주문 전 체크리스트부터 차근차근 볼 수 있어요.</p>
+            <Link href="/guide">가이드 보기</Link>
           </article>
         </div>
       </section>
